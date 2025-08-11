@@ -9,7 +9,7 @@ let package = Package(
     products: [
         .library(
             name: "BBPSSDK",
-            targets: ["BBPSSDK", "BBPSSDKDependencies"]
+            targets: ["BBPSSDK"]
         )
     ],
     dependencies: [
@@ -18,19 +18,11 @@ let package = Package(
     targets: [
         .target(
             name: "BBPSSDK",
-            path: "Sources/BBPSSDK",
-            publicHeadersPath: ".",
-            cSettings: [
-                .headerSearchPath("Constants"),
-                .headerSearchPath("Utils"),
-                .headerSearchPath("CheckoutLite")
-            ]
-        ),
-        .target(
-            name: "BBPSSDKDependencies",
             dependencies: [
                 .product(name: "HyperSDK", package: "HyperSDK")
-            ]
+            ],
+            path: "Sources/BBPSSDK",
+            publicHeadersPath: "."
         )
     ]
 )
