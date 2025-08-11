@@ -1,22 +1,15 @@
 #!/bin/bash
-
-# Git commit message checker for BBPS iOS SDK
-# This script validates commit message format
-
-commit_regex='^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .{1,50}'
-
-error_msg="Aborting commit. Your commit message is invalid. See the example below:
-
-feat(bbps): add new bill payment functionality
-fix(utils): resolve payload validation issue
-docs(readme): update installation instructions
-
-The commit message should be structured as follows:
-<type>[optional scope]: <description>
-
-Where type can be: feat, fix, docs, style, refactor, test, chore"
-
-if ! grep -qE "$commit_regex" "$1"; then
-    echo "$error_msg" >&2
-    exit 1
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+if [[ ! $COMMIT_MSG =~ ^(fix|feat|break|chore|docs|style|refactor|test|ci):.*$ ]]; then
+  echo "❌ Commit message must follow conventional format:"
+  echo "   fix: for bug fixes (patch version bump)"
+  echo "   feat: for new features (minor version bump)"
+  echo "   break: for breaking changes (major version bump)"
+  echo "   chore: for maintenance tasks (no version bump)"
+  echo "   docs|style|refactor|test|ci: for other changes"
+  echo ""
+  echo "Current message: $COMMIT_MSG"
+  exit 1
 fi
+echo "✅ Commit message format is valid"
