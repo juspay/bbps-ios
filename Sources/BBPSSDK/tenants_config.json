@@ -1,0 +1,7 @@
+{
+  "DEFAULT": {
+    "tenantId": "defaultTenant",
+    "releaseConfigTemplateUrl": "https://%@payments.juspay.in/hyper/bundles/in.juspay.merchants/%@/ios/%@/release-config.json?toss=%d",
+    "logsEndPoints": null
+  }
+}
