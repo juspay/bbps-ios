@@ -1,0 +1,129 @@
+name: Semantic Versioning with Conventional Commits
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  semantic-version:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get commit message
+        id: commit
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "message=$COMMIT_MSG" >> $GITHUB_OUTPUT
+          echo "Commit message: $COMMIT_MSG"
+
+      - name: Get latest tag
+        id: latest_tag
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+          echo "Latest tag: $LATEST_TAG"
+
+      - name: Parse commit type and calculate new version
+        id: version
+        run: |
+          COMMIT_MSG="${{ steps.commit.outputs.message }}"
+          LATEST_TAG="${{ steps.latest_tag.outputs.tag }}"
+          
+          # Remove 'v' prefix if present
+          CURRENT_VERSION=${LATEST_TAG#v}
+          
+          # Split version into parts
+          IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
+          MAJOR=${VERSION_PARTS[0]:-0}
+          MINOR=${VERSION_PARTS[1]:-0}
+          PATCH=${VERSION_PARTS[2]:-0}
+          
+          echo "Current version: $MAJOR.$MINOR.$PATCH"
+          
+          # Check commit message format and determine version bump
+          if [[ $COMMIT_MSG =~ ^break:.*|^feat!:.*|BREAKING[[:space:]]CHANGE ]]; then
+            # Breaking change - bump major version
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+            BUMP_TYPE="major"
+            echo "Breaking change detected - bumping major version"
+          elif [[ $COMMIT_MSG =~ ^feat: ]]; then
+            # New feature - bump minor version
+            MINOR=$((MINOR + 1))
+            PATCH=0
+            BUMP_TYPE="minor"
+            echo "Feature detected - bumping minor version"
+          elif [[ $COMMIT_MSG =~ ^fix: ]]; then
+            # Bug fix - bump patch version
+            PATCH=$((PATCH + 1))
+            BUMP_TYPE="patch"
+            echo "Fix detected - bumping patch version"
+          elif [[ $COMMIT_MSG =~ ^chore: ]]; then
+            # No version bump for chores
+            echo "Chore detected - no version bump"
+            echo "version=" >> $GITHUB_OUTPUT
+            echo "bump_type=none" >> $GITHUB_OUTPUT
+            exit 0
+          else
+            # Unknown format - no version bump
+            echo "Unknown commit format - no version bump"
+            echo "Expected format: fix:, feat:, break:, or chore:"
+            echo "version=" >> $GITHUB_OUTPUT
+            echo "bump_type=none" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
+          echo "New version: $NEW_VERSION"
+
+      - name: Check if tag exists
+        id: tag_check
+        if: steps.version.outputs.version != ''
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          if git rev-parse "$VERSION" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Tag $VERSION already exists"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Tag $VERSION does not exist"
+          fi
+
+      - name: Create and push tag
+        if: steps.version.outputs.version != '' && steps.tag_check.outputs.exists == 'false'
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          COMMIT_MSG="${{ steps.commit.outputs.message }}"
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git tag -a "$VERSION" -m "Release $VERSION: $COMMIT_MSG"
+          git push origin "$VERSION"
+          
+          echo "Created and pushed tag: $VERSION"
+
+      - name: Create GitHub Release
+        if: steps.version.outputs.version != '' && steps.tag_check.outputs.exists == 'false'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          release_name: Release ${{ steps.version.outputs.version }}
+          body: |
+            Release ${{ steps.version.outputs.version }}
+            
+            Commit: ${{ steps.commit.outputs.message }}
+          draft: false
+          prerelease: false

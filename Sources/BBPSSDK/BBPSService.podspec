@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-    s.name         = "BBPSSDK"
+    s.name         = "BBPSService"
     s.version      = "HYPER_SDK_VERSION"
     s.summary      = "Hyper visualization and payment processing."
     s.description  = <<-DESC
