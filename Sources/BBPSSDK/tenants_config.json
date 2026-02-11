@@ -1,8 +1,8 @@
 {
   "DEFAULT": {
-    "tenantId": "defaultTenant",
+    "tenantId": "bbps",
     "releaseConfigURL": "https://api.beta.bbps.sdk.juspay.in/release/v2/juspay/bbps",
-    "moduleNames": ["BBPSModule"]
+    "moduleNames": ["BBPSModule"],
     "logsEndPoints": null
   }
 }

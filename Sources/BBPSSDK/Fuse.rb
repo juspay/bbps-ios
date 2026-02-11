@@ -5,7 +5,7 @@ allTenantParams = [  {
             sandbox_resource_url: "https://airborne.juspay.in/build/juspay/bbps-ios/zip",
             versioned_resource_url: "https://airborne.juspay.in/build/juspay/bbps-ios/zip",
             merchant_config_json: "BBPSConfig.json",
-            tenant_id: "defaultTenant",
+            tenant_id: "bbps",
         }]
 
 fuse_path = if Dir.exist?("./Pods/HyperSDK")
