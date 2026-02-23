@@ -8,6 +8,7 @@
 #import "BBPSBridge.h"
 #import <UIKit/UIKit.h>
 #import <CommonCrypto/CommonHMAC.h>
+#import <Photos/Photos.h>
 
 @interface BBPSBridge ()
 @property (nonatomic, strong) id<BridgeComponent> bridgeComponent;
@@ -62,6 +63,73 @@
     NSString *encoded = [rawData base64EncodedStringWithOptions:0];
 
     return encoded;
+}
+
+- (NSString*)saveImage:(NSString *)viewId :(NSString *)callback {
+    UIView *parentView = [[self.bridgeComponent getContainerView] viewWithTag:[viewId intValue]];
+    if (parentView == nil || ![parentView isKindOfClass:[UIView class]]){
+//        [self invokeDUICallback:callback withValue:@"{\"error\":\"true\",\"data\":\"invalid viewId\"}"];
+        return @"false";
+    }
+
+    UIImage *image = [self captureView:parentView];
+    [self saveImageToPhotos:image];
+    return @"true";
+}
+
+- (UIImage *)captureView:(UIView *)view {
+
+    if (!view) return nil;
+
+    [view layoutIfNeeded];
+
+    UIGraphicsImageRendererFormat *format = [UIGraphicsImageRendererFormat defaultFormat];
+    format.opaque = YES;
+    format.scale = UIScreen.mainScreen.scale;
+
+    UIGraphicsImageRenderer *renderer =
+        [[UIGraphicsImageRenderer alloc] initWithSize:view.bounds.size
+                                               format:format];
+
+    UIImage *image =
+        [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull context) {
+            [view drawViewHierarchyInRect:view.bounds
+                       afterScreenUpdates:YES];
+        }];
+
+    return image;
+}
+
+- (void)saveImageToPhotos:(UIImage *)image {
+
+    if (!image) {
+        NSLog(@"Image is nil");
+        return;
+    }
+
+    [PHPhotoLibrary requestAuthorizationForAccessLevel:PHAccessLevelAddOnly
+                                                handler:^(PHAuthorizationStatus status) {
+
+        if (status == PHAuthorizationStatusAuthorized ||
+            status == PHAuthorizationStatusLimited) {
+
+            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                [PHAssetChangeRequest creationRequestForAssetFromImage:image];
+            } completionHandler:^(BOOL success, NSError * _Nullable error) {
+
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (success) {
+                        NSLog(@"Saved successfully");
+                    } else {
+                        NSLog(@"Save failed: %@", error.localizedDescription);
+                    }
+                });
+            }];
+
+        } else {
+            NSLog(@"Permission denied");
+        }
+    }];
 }
 
 
