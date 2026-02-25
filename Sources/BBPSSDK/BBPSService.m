@@ -76,6 +76,7 @@
             NSLog(@"Invalid response from SDK. Unidentified event");
         }
     };
+    NSLog(@"Initiate payload: %@", [self createBBPSPayload:initiationPayload]);
     [super initiate:viewController payload:[self createBBPSPayload:initiationPayload] callback:bbpsCallback];
 }
 
