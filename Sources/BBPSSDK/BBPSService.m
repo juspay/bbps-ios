@@ -8,6 +8,7 @@
 @interface BBPSService()
 
 @property (nonatomic, strong) NSString *clientId;
+@property (nonatomic, copy) BBPSServiceCallback bbpsCallback;
 
 @end
 
@@ -34,6 +35,10 @@
     NSLog(@"Tenant params : %@", tenantParams.releaseConfigURL);
     self = [super initWithTenantParams:tenantParams];
     if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleBBPSEvent:)
+                                                     name:@"BBPSEventNotification"
+                                                   object:nil];
     }
     return self;
 }
@@ -56,6 +61,7 @@
 }
 
 - (void)initiate:(UIViewController *)viewController payload:(NSDictionary *)initiationPayload callback:(BBPSServiceCallback)callback {
+    self.bbpsCallback = callback;
     BBPSServiceCallback bbpsCallback = ^(NSDictionary *response) {
         NSLog(@"In bbpscallback : %@", response);
         NSString *event = response [@"event"];
@@ -74,8 +80,35 @@
             NSLog(@"Invalid response from SDK. Unidentified event");
         }
     };
-    NSLog(@"Initiate payload: %@", [self createBBPSPayload:initiationPayload]);
     [super initiate:viewController payload:[self createBBPSPayload:initiationPayload] callback:bbpsCallback];
+}
+
+- (void)handleBBPSEvent:(NSNotification *)notification {
+    NSString *event = notification.userInfo[@"event"];
+    NSString *payloadStr = notification.userInfo[@"payload"];
+
+    if (self.bbpsCallback) {
+        NSDictionary *parsedPayload = @{};
+        if (payloadStr.length > 0) {
+            NSData *data = [payloadStr dataUsingEncoding:NSUTF8StringEncoding];
+            if (data) {
+                NSError *jsonError;
+                id decoded = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+                if (!jsonError && [decoded isKindOfClass:[NSDictionary class]]) {
+                    parsedPayload = decoded;
+                }
+            }
+        }
+
+        NSDictionary *response = @{
+            @"event": event ?: @"",
+            @"payload": parsedPayload,
+            @"error": @NO,
+            @"errorCode": @"",
+            @"errorMessage": @""
+        };
+        self.bbpsCallback(response);
+    }
 }
 
 - (void)process:(UIViewController *)viewController payload:(NSDictionary *)processPayload {
@@ -89,6 +122,8 @@
 }
 
 - (void)terminate {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"BBPSEventNotification" object:nil];
+    self.bbpsCallback = nil;
     [super terminate];
 }
 
