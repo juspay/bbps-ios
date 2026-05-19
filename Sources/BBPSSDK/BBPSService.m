@@ -93,7 +93,7 @@
 }
 
 - (Boolean)isInitialised {
-    [super isInitialised];
+    return [super isInitialised];
 }
 
 - (BBPSServiceEventsCallback)merchantEvent {
