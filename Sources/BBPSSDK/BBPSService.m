@@ -58,20 +58,15 @@
 - (void)initiate:(UIViewController *)viewController payload:(NSDictionary *)initiationPayload callback:(BBPSServiceCallback)callback {
     BBPSServiceCallback bbpsCallback = ^(NSDictionary *response) {
         NSLog(@"In bbpscallback : %@", response);
-        NSString *event = response [@"event"];
-        NSDictionary *payload = response[@"payload"];
-        
-        if ([event isEqualToString:@"initiate_result"]) {
-            NSLog(@"Initiate result: %@", payload);
-            callback(payload);
-        } else if([event isEqualToString:@"process_result"]) {
-            NSLog(@"Process result: %@", payload);
-            callback(payload);
-        } else if([event isEqualToString:@"refresh_auth"]) {
-            NSLog(@"Refresh auth triggered");
-            callback(payload);
+        NSString *event = response[@"event"];
+
+        if ([event isEqualToString:@"initiate_result"]
+            || [event isEqualToString:@"DO_PAYMENT"]
+            || [event isEqualToString:@"process_result"]
+            || [event isEqualToString:@"refresh_auth"]) {
+            callback(response);
         } else {
-            NSLog(@"Invalid response from SDK. Unidentified event");
+            NSLog(@"Unidentified event from SDK: %@", event);
         }
     };
     NSLog(@"Initiate payload: %@", [self createBBPSPayload:initiationPayload]);

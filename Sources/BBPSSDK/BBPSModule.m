@@ -36,7 +36,7 @@
 }
 
 - (NSArray<NSString *> *)getEventsToWhitelist {
-    return @[];
+    return @[@"DO_PAYMENT"];
 }
 
 - (void)terminate {
