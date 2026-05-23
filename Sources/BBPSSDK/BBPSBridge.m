@@ -65,6 +65,15 @@
     return encoded;
 }
 
+- (NSString *)onBBPSEvent:(NSString *)event :(NSString *)payload {
+    NSDictionary *userInfo = @{
+        @"event": event ?: @"",
+        @"payload": payload ?: @""
+    };
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"BBPSEventNotification" object:nil userInfo:userInfo];
+    return @"true";
+}
+
 - (NSString*)saveImage:(NSString *)viewId :(NSString *)callback {
     UIView *parentView = [[self.bridgeComponent getContainerView] viewWithTag:[viewId intValue]];
     if (parentView == nil || ![parentView isKindOfClass:[UIView class]]){
@@ -130,6 +139,32 @@
             NSLog(@"Permission denied");
         }
     }];
+}
+
+- (BOOL)isUpiUrlWhitelisted:(NSString *)urlString {
+    NSArray<NSString *> *whitelistedSchemes = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"LSApplicationQueriesSchemes"] ?: @[];
+    for (NSString *scheme in whitelistedSchemes) {
+        NSString *schemePrefix = [scheme stringByAppendingString:@"://"];
+        if ([urlString hasPrefix:schemePrefix]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (void)openUpiIntent:(NSString *)upiIntentUrl {
+    if (upiIntentUrl == nil || upiIntentUrl.length == 0) return;
+
+    if (![self isUpiUrlWhitelisted:upiIntentUrl]) return;
+
+    NSURL *appURL = [NSURL URLWithString:upiIntentUrl];
+    if (appURL == nil) return;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([[UIApplication sharedApplication] canOpenURL:appURL]) {
+            [[UIApplication sharedApplication] openURL:appURL options:@{} completionHandler:nil];
+        }
+    });
 }
 
 

@@ -18,7 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
                                         :(NSString *)timestamp
                                         :(NSString *)data;
 - (NSString *)base64Encode:(NSString *)data;
-
+- (NSString *)onBBPSEvent:(NSString *)event :(NSString *)payload;
+- (void)openUpiIntent:(NSString *)upiIntentUrl;
 
 @end
 
