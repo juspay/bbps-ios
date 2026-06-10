@@ -1,11 +1,11 @@
 require 'json'
 
 allTenantParams = [  {
-            resource_url: "https://public.releases.juspay.in/hyper/bundles/in.juspay.merchants/%@client_id/ios/release/assets.zip",
-            sandbox_resource_url: "https://public.releases.juspay.in/hyper/bundles/in.juspay.merchants/%@client_id/ios/release/assets.zip",
-            versioned_resource_url: "https://public.releases.juspay.in/hyper-sdk/in/juspay/merchants/hyper.assets.%@client_id/%@asset_version/hyper.assets.%@client_id-%@asset_version.zipless",
+            resource_url: "https://airborne.juspay.in/build/juspay/bbps-ios/zip",
+            sandbox_resource_url: "https://airborne.juspay.in/build/juspay/bbps-ios/zip",
+            versioned_resource_url: "https://airborne.juspay.in/build/juspay/bbps-ios/zip",
             merchant_config_json: "BBPSConfig.json",
-            tenant_id: "defaultTenant",
+            tenant_id: "bbps",
         }]
 
 fuse_path = if Dir.exist?("./Pods/HyperSDK")

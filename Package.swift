@@ -1,4 +1,5 @@
 // swift-tools-version:5.3
+// Version: 0.0.2 (keep in sync with VERSION file)
 import PackageDescription
 
 let package = Package(
@@ -13,7 +14,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(name: "HyperSDK", url: "https://github.com/juspay/hypersdk-ios.git", .exact("2.2.4")),
+        .package(name: "HyperSDK", url: "https://github.com/juspay/hypersdk-ios.git", .exact("2.2.7")),
     ],
     targets: [
         .target(
