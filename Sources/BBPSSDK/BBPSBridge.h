@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)base64Encode:(NSString *)data;
 
 // HyperUPI bridge methods
-- (BOOL)isHyperUPIPresent;
+- (void)isHyperUPIPresent:(NSString *)callback;
 - (void)initiateHyperUPI:(NSString *)payload :(NSString *)callback;
 - (void)processHyperUPI:(NSString *)payload :(NSString *)callback;
 

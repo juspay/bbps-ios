@@ -140,9 +140,9 @@
 
 // MARK: - HyperUPI bridge methods
 
-- (BOOL)isHyperUPIPresent {
-    if(NSClassFromString(@"UPIInterface") != nil)   return true;
-    return false;
+- (void)isHyperUPIPresent:(NSString *)callback {
+    NSString *result = (NSClassFromString(@"HyperUPI.HyperUPI") != nil) ? @"true" : @"false";
+    [self invokeCallback:callback withJSON:result];
 }
 
 - (void)initiateHyperUPI:(NSString *)payload :(NSString *)callback {
