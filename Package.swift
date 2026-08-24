@@ -1,11 +1,11 @@
 // swift-tools-version:5.3
-// Version: 0.0.6 (keep in sync with VERSION file)
+// Version: 0.0.7 (keep in sync with VERSION file)
 import PackageDescription
 
 let package = Package(
     name: "BBPSSDK",
     platforms: [
-        .iOS(.v12)
+        .iOS(.v13)
     ],
     products: [
         .library(
