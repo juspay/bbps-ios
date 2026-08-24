@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/juspay/hypercore-ios.git",
         "state": {
           "branch": null,
-          "revision": "a2cea2ddec2715fe2b5b310b7a0c2fb4926b721e",
-          "version": "1.0.0"
+          "revision": "41ca7b4cf21c5c7986102fb47c23a522c6d973d1",
+          "version": "1.0.4"
         }
       },
       {
@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/juspay/hypersdk-ios.git",
         "state": {
           "branch": null,
-          "revision": "f9bd5d917d09128a7d91d38b8e19bec4d74e1049",
-          "version": "2.2.7"
+          "revision": "01aef15d3ae8ca8c0c428d3993f23abc6ec94e58",
+          "version": "2.2.8"
         }
       },
       {
