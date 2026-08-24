@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Juspay' => 'support@juspay.in' }
   s.source           = { :git => 'https://github.com/juspay/bbps-ios.git', :tag => "v#{s.version}" }
 
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '13.0'
 
   s.source_files     = 'Sources/BBPSSDK/**/*.{h,m}'
   s.public_header_files = 'Sources/BBPSSDK/**/*.h'
