@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.resources        = ['Sources/BBPSSDK/Fuse.rb', 'Sources/BBPSSDK/tenants_config.json']
   s.preserve_paths   = ['Sources/BBPSSDK/Fuse.rb']
 
-  s.dependency 'HyperSDK', '2.2.7'
+  s.dependency 'HyperSDK', '2.2.8'
 
   s.prepare_command = <<-CMD
     echo "BBPSSDK #{s.version} installed. Run Fuse.rb during build to download assets."
