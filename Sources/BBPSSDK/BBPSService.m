@@ -61,10 +61,9 @@
         NSString *event = response[@"event"];
 
         if ([event isEqualToString:@"initiate_result"]
-            || [event isEqualToString:@"DO_PAYMENT"]
             || [event isEqualToString:@"process_result"]
             || [event isEqualToString:@"refresh_auth"]) {
-            callback(response);
+            callback(response[@"payload"]);
         } else {
             NSLog(@"Unidentified event from SDK: %@", event);
         }
