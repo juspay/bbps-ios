@@ -1,7 +1,8 @@
 {
   "DEFAULT": {
-    "tenantId": "defaultTenant",
-    "releaseConfigTemplateUrl": "https://%@payments.juspay.in/hyper/bundles/in.juspay.merchants/%@/ios/%@/release-config.json?toss=%d",
+    "tenantId": "bbps",
+    "releaseConfigURL": "https://api.beta.bbps.sdk.juspay.in/release/v2/juspay/bbps",
+    "moduleNames": ["BBPSModule"],
     "logsEndPoints": null
   }
 }

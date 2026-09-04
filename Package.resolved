@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "HyperCore",
+        "repositoryURL": "https://github.com/juspay/hypercore-ios.git",
+        "state": {
+          "branch": null,
+          "revision": "41ca7b4cf21c5c7986102fb47c23a522c6d973d1",
+          "version": "1.0.4"
+        }
+      },
+      {
+        "package": "HyperSDK",
+        "repositoryURL": "https://github.com/juspay/hypersdk-ios.git",
+        "state": {
+          "branch": null,
+          "revision": "01aef15d3ae8ca8c0c428d3993f23abc6ec94e58",
+          "version": "2.2.8"
+        }
+      },
+      {
+        "package": "JuspaySafeBrowser",
+        "repositoryURL": "https://github.com/juspay/juspaysafebrowser-ios.git",
+        "state": {
+          "branch": null,
+          "revision": "a086ac9b6533929877d80c1489f340d476d4542a",
+          "version": "0.1.94"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

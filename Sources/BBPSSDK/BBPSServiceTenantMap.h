@@ -8,7 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString *tenantId;
 @property (nonatomic, readonly) NSString *releaseConfigTemplateUrl;
 @property (nonatomic, readonly, nullable) NSDictionary *logsEndPoints;
-
+@property (nonatomic, strong) NSArray<NSString *> * _Nullable moduleNames;
 + (nullable instancetype)tenantWithName:(NSString *)name;
 
 - (nullable id)objectForKeyedSubscript:(NSString *)key;

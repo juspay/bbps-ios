@@ -65,6 +65,22 @@ _Sample:_
 
 ## **1.2. Installing BBPSSDK**
 
+### CocoaPods
+
+Add BBPSSDK to your `Podfile`:
+
+```ruby
+pod 'BBPSSDK', '~> 0.0.2'
+```
+
+Then run:
+
+```bash
+pod install
+```
+
+For asset downloads, ensure `BBPSConfig.json` is in your project root and add the build script as described in Section 1.1.
+
 ### Swift Package Manager
 
 Add BBPSSDK to your project using Xcode:
