@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
                                         :(NSString *)timestamp
                                         :(NSString *)data;
 - (NSString *)base64Encode:(NSString *)data;
+- (void)playSound:(NSString *)sound :(NSString *)callback;
 
 // HyperUPI bridge methods
 - (void)isHyperUPIPresent:(NSString *)callback;

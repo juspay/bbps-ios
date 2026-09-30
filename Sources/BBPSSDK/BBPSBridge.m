@@ -10,6 +10,7 @@
 #import <CommonCrypto/CommonHMAC.h>
 #import <Photos/Photos.h>
 #import <HyperCore/HyperCore.h>
+#import <AVFoundation/AVFoundation.h>
 
 @interface BBPSBridge ()
 @property (nonatomic, strong) id<BridgeComponent> bridgeComponent;
@@ -18,6 +19,8 @@
 @property (nonatomic, strong) HyperServices *hyperUPIServices;
 @property (nonatomic, copy)   NSString *upiInitiateCallback;
 @property (nonatomic, copy)   NSString *upiProcessCallback;
+
+@property (nonatomic, strong) AVAudioPlayer *soundPlayer;
 
 @end
 
@@ -220,6 +223,28 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.bridgeComponent executeOnWebView:jsStr];
     });
+}
+
+extern unsigned char mogo_mp3[];
+extern unsigned int mogo_mp3_len;
+
+- (void)playSound:(NSString *)sound :(NSString *)callback {
+    if (sound == nil) {
+        NSLog(@"[BBPSBridge] playSound: sound NOT PROVIDED");
+        return;
+    }
+
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback
+                                     withOptions:AVAudioSessionCategoryOptionMixWithOthers
+                                           error:nil];
+
+    NSData *soundData = [NSData dataWithBytes:mogo_mp3 length:mogo_mp3_len];
+    AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithData:soundData error:nil];
+    if (!player) return;
+
+    player.volume = 0.10;
+    self.soundPlayer = player;
+    [player play];
 }
 
 @end
