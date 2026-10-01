@@ -23,6 +23,7 @@ let package = Package(
                 .product(name: "HyperSDK", package: "HyperSDK")
             ],
             path: "Sources/BBPSSDK",
+            resources: [.copy("mogo.mp3")],
             publicHeadersPath: "."
         )
     ]
