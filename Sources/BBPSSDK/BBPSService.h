@@ -20,11 +20,12 @@ typedef HyperEventsCallback BBPSServiceEventsCallback;
 @property (nonatomic, weak) id <BBPSServiceDelegate> _Nullable delegate;
 
 + (void)preFetch:(NSDictionary *)data __unavailable;
-
 - (instancetype _Nonnull)initWithClientId:(NSString * _Nonnull)clientId;
-
 - (void)initiate:(UIViewController * _Nonnull)viewController payload:(NSDictionary * _Nonnull)initiationPayload callback:(BBPSServiceCallback _Nonnull)callback;
-
+- (void)process:(NSDictionary * _Nonnull)viewController processPayload:(NSDictionary * _Nonnull)processPayload;
+- (void)process:(NSDictionary * _Nonnull)processPayload;
+- (void)terminate;
+- (Boolean)isInitialised;
 - (BBPSServiceEventsCallback _Nullable)merchantEvent;
 
 @end
