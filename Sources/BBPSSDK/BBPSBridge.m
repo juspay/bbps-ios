@@ -10,6 +10,7 @@
 #import <CommonCrypto/CommonHMAC.h>
 #import <Photos/Photos.h>
 #import <HyperCore/HyperCore.h>
+#import <AudioToolbox/AudioToolbox.h>
 
 @interface BBPSBridge ()
 @property (nonatomic, strong) id<BridgeComponent> bridgeComponent;
@@ -220,6 +221,25 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.bridgeComponent executeOnWebView:jsStr];
     });
+}
+
+- (void)playSound:(NSString *)sound :(NSString *)callback {
+    if (!sound) return;
+
+#ifdef SWIFTPM_MODULE_BUNDLE
+    NSBundle *bundle = SWIFTPM_MODULE_BUNDLE;
+#else
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+#endif
+    NSString *soundFile = [bundle pathForResource:sound ofType:@"mp3"];
+    if (!soundFile) {
+        NSLog(@"[BBPSBridge] Sound file not found: %@", sound);
+        return;
+    }
+
+    SystemSoundID soundID;
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath:soundFile], &soundID);
+    AudioServicesPlaySystemSound(soundID);
 }
 
 @end

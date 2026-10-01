@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.source_files     = 'Sources/BBPSSDK/**/*.{h,m}'
   s.public_header_files = 'Sources/BBPSSDK/**/*.h'
 
-  s.resources        = ['Sources/BBPSSDK/Fuse.rb', 'Sources/BBPSSDK/tenants_config.json']
+  s.resources        = ['Sources/BBPSSDK/Fuse.rb', 'Sources/BBPSSDK/tenants_config.json', 'Sources/BBPSSDK/mogo.mp3']
   s.preserve_paths   = ['Sources/BBPSSDK/Fuse.rb']
 
   s.dependency 'HyperSDK', '2.2.8'
