@@ -70,7 +70,7 @@ _Sample:_
 Add BBPSSDK to your `Podfile`:
 
 ```ruby
-pod 'BBPSSDK', '~> 0.0.2'
+pod 'BBPSSDK', '~> 0.1.5'
 ```
 
 Then run:
